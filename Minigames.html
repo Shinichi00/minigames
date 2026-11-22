@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For My Baby ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap');
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ min-height:100vh;
+ background:linear-gradient(135deg,#ffe1ef,#eadfff,#fff0f7);
+ font-family:Quicksand,sans-serif;
+ color:#875b88;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
+ overflow-x:hidden;
+}
+
+#hearts{
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ overflow:hidden;
+ z-index:0;
+}
+
+.floating{
+ position:absolute;
+ bottom:-30px;
+ animation:floatUp linear forwards;
+ opacity:.7;
+}
+
+@keyframes floatUp{
+ to{
+  transform:translateY(-110vh) rotate(360deg);
+  opacity:0;
+ }
+}
+
+.container{
+ width:100%;
+ max-width:490px;
+ background:#ffffffed;
+ border:2px solid white;
+ border-radius:30px;
+ padding:28px 23px;
+ text-align:center;
+ box-shadow:0 15px 45px #bd8bc533;
+ position:relative;
+ z-index:1;
+ animation:appear .5s ease;
+}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(15px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+h1{
+ font-family:Pacifico,cursive;
+ color:#d77eae;
+ font-size:34px;
+ font-weight:400;
+ margin:12px 0;
+}
+
+h2{color:#c47cb1;font-size:22px}
+
+p{line-height:1.7}
+
+.emoji{font-size:65px;margin:10px}
+
+.small{font-size:12px;color:#b48eaf}
+
+button{
+ border:0;
+ border-radius:18px;
+ padding:14px 18px;
+ font-family:inherit;
+ font-size:14px;
+ font-weight:700;
+ cursor:pointer;
+ transition:.2s;
+}
+
+button:active{transform:scale(.96)}
+
+.primary{
+ background:linear-gradient(120deg,#ee9fc9,#b99be9);
+ color:white;
+ width:100%;
+ margin-top:15px;
+ box-shadow:0 5px 15px #dba1c944;
+}
+
+.options{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+ margin:22px 0;
+}
+
+.option{
+ background:#fff0f8;
+ border:2px solid #f3d6e9;
+ color:#a765a1;
+ min-height:85px;
+}
+
+.option:hover,.option.selected{
+ background:#dba9e7;
+ color:white;
+ border-color:#dba9e7;
+}
+
+.option:disabled{opacity:1;cursor:default}
+
+.progress{
+ height:9px;
+ background:#f4e2f2;
+ border-radius:20px;
+ overflow:hidden;
+ margin:18px 0;
+}
+
+.bar{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#ef9cc8,#ad94e9);
+ transition:.4s;
+}
+
+.card{
+ padding:20px;
+ border-radius:20px;
+ background:#fff3fa;
+ margin:16px 0;
+}
+
+#feedback{
+ min-height:28px;
+ color:#d179ae;
+ font-weight:700;
+ font-size:14px;
+}
+
+.hidden{display:none!important}
+
+.loveletter{
+ background:#fff1f8;
+ padding:22px;
+ border-radius:20px;
+ text-align:left;
+ line-height:1.9;
+ white-space:pre-line;
+ font-size:14px;
+}
+
+#confetti{
+ font-size:25px;
+ letter-spacing:7px;
+ animation:bounce 1s infinite alternate;
+}
+
+@keyframes bounce{
+ to{transform:translateY(-8px)}
+}
+
+@media(max-width:380px){
+ .container{padding:22px 16px}
+ h1{font-size:29px}
+ .option{font-size:12px;padding:12px 8px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="hearts"></div>
+
+<main class="container">
+
+<!-- WELCOME -->
+<section id="welcome">
+ <div class="emoji">💗</div>
+ <h1>Hi, Baby!</h1>
+
+ <p>
+  I made a little something just for you.
+  <br>
+  A few games, a little fun, and a special surprise
+  waiting at the end.
+ </p>
+
+ <div class="card">
+  🌷 🧸 💕 🌷
+  <p class="small">
+   A little game made with lots of love, just for you.
+  </p>
+ </div>
+
+ <p>Are you ready, Flawless girl?</p>
+
+ <button class="primary" onclick="startGame()">
+  Let's Play! ♡
+ </button>
+</section>
+
+<!-- GAME -->
+<section id="game" class="hidden">
+
+ <div class="small" id="gameNumber"></div>
+ <h2 id="gameTitle"></h2>
+
+ <div class="progress">
+  <div class="bar" id="bar"></div>
+ </div>
+
+ <div class="small" id="counter"></div>
+
+ <div class="card">
+  <div style="font-size:35px">💌</div>
+  <h3 id="question"></h3>
+ </div>
+
+ <div class="options" id="options"></div>
+
+ <p id="feedback"></p>
+
+ <button class="primary" id="next"
+ onclick="nextQuestion()" disabled>
+  Next Question ♡
+ </button>
+
+ <p class="small">
+  💗 Hearts collected: <span id="score">0</span>
+ </p>
+
+</section>
+
+<!-- ENDING -->
+<section id="ending" class="hidden">
+
+ <div id="confetti">💗 ✨ 💜 ✨ 💗</div>
+ <div class="emoji">🎀</div>
+
+ <h1>You Did It, Baby!</h1>
+ <h2 id="finalScore"></h2>
+
+ <p>You finished all four games!</p>
+
+ <div class="card">
+  <h2>One Last Surprise... 🎁</h2>
+  <p>There's something I want you to read.</p>
+
+  <button class="primary" onclick="openLetter()">
+   Open Your Surprise ♡
+  </button>
+ </div>
+
+ <div id="letter" class="hidden">
+  <h1>For You, Baby 💜</h1>
+  <div class="loveletter" id="letterContent"></div>
+ </div>
+
+ <button class="primary" onclick="restart()">
+  Play Again ↻
+ </button>
+
+</section>
+
+</main>
+
+<script>
+
+// GAMES AND QUESTIONS
+
+const games=[
+
+{
+ title:"This or That 💕",
+ questions:[
+  {q:"Which would you choose?",a:["Long hugs 🫂","Sweet kisses 💋"]},
+  {q:"What's your favorite?",a:["Morning messages ☀️","Midnight calls 🌙"]},
+  {q:"Choose our dream date!",a:["Beach date 🌊","Movie date 🍿"]},
+  {q:"What makes you happier?",a:["Forehead kisses 💗","Random hugs 🧸"]},
+  {q:"Where should we go?",a:["Travel together ✈️","Stay home together 🏡"]}
+ ]
+},
+
+{
+ title:"How Well Do You Know Me? 🧸",
+ questions:[
+  {q:"What makes me happiest?",a:["Talking to you","Playing games","Sleeping"],correct:0},
+  {q:"What's my favorite kind of day?",a:["A day with you","A day alone","A busy day"],correct:0},
+  {q:"What do I want most?",a:["A new phone","To be with you","A vacation"],correct:1},
+  {q:"What's my favorite thing about you?",a:["Your smile","Your attitude","Your cooking"],correct:0},
+  {q:"Who is my favorite person?",a:["My best friend","Myself","You, baby"],correct:2}
+ ]
+},
+
+{
+ title:"Would You Rather? 🌷",
+ questions:[
+  {q:"Would you rather spend a whole day cuddling with me?",a:["YES PLEASE! 🥰","OF COURSE! 💗"]},
+  {q:"Would you rather have a surprise date with me?",a:["Definitely! 🌹","Absolutely! 💕"]},
+  {q:"Would you rather receive 100 kisses?",a:["Give me more! 💋","YESSS! 😚"]},
+  {q:"Would you rather watch the sunset with me?",a:["Dream date! 🌅","Every single time! 💜"]},
+  {q:"Would you rather wake up beside me every day?",a:["My biggest dream 🥺","Forever, please! ♡"]}
+ ]
+},
+
+{
+ title:"Guess Our Memories 💌",
+ questions:[
+  {q:"What do I love most about us?",a:["Our little moments","Our arguments","Our silence"],correct:0},
+  {q:"What do I always wish for?",a:["More time with you","More sleep","More food"],correct:0},
+  {q:"What's my favorite kind of date?",a:["One with you","Shopping alone","Going to work"],correct:0},
+  {q:"What do I wish I could do right now?",a:["Hold you tight","Go shopping","Play games"],correct:0},
+  {q:"What's one thing we're looking forward to?",a:["Finally meeting","Buying a car","Getting a pet"],correct:0}
+ ]
+}
+];
+
+let gameIndex=0;
+let questionIndex=0;
+let score=0;
+let answered=false;
+
+const $=id=>document.getElementById(id);
+
+// START GAME
+
+function startGame(){
+ $("welcome").classList.add("hidden");
+ $("game").classList.remove("hidden");
+ render();
+}
+
+// DISPLAY QUESTIONS
+
+function render(){
+
+ const game=games[gameIndex];
+ const q=game.questions[questionIndex];
+
+ $("gameNumber").textContent="GAME "+(gameIndex+1)+" OF 4";
+ $("gameTitle").textContent=game.title;
+ $("question").textContent=q.q;
+
+ $("counter").textContent=
+ "Question "+(questionIndex+1)+" of "+game.questions.length;
+
+ const total=games.reduce((n,g)=>n+g.questions.length,0);
+
+ const completed=
+ games.slice(0,gameIndex).reduce((n,g)=>n+g.questions.length,0)
+ +questionIndex;
+
+ $("bar").style.width=(completed/total*100)+"%";
+
+ $("feedback").textContent="";
+ $("next").disabled=true;
+ $("score").textContent=score;
+
+ answered=false;
+ $("options").innerHTML="";
+
+ q.a.forEach((answer,index)=>{
+
+  const btn=document.createElement("button");
+
+  btn.className="option";
+  btn.textContent=answer;
+
+  btn.onclick=()=>choose(btn,index,q);
+
+  $("options").appendChild(btn);
+
+ });
+}
+
+// SELECT ANSWER
+
+function choose(btn,index,q){
+
+ if(answered)return;
+
+ answered=true;
+
+ document.querySelectorAll(".option").forEach(b=>{
+  b.disabled=true;
+ });
+
+ // Preference questions have no wrong answers.
+ // Every preference answer earns one heart.
+
+ if(q.correct===undefined){
+
+  score++;
+  btn.classList.add("selected");
+
+  $("feedback").textContent=
+  "Aww! I love your choice, baby! 💗";
+
+ }else if(index===q.correct){
+
+  score++;
+  btn.classList.add("selected");
+
+  $("feedback").textContent=
+  "You know me so well! 🥰";
+
+ }else{
+
+  $("feedback").textContent=
+  "Hehe! Not quite, baby! Here's a little hug! 🫂";
+
+ }
+
+ $("score").textContent=score;
+ $("next").disabled=false;
+
+}
+
+// NEXT QUESTION
+
+function nextQuestion(){
+
+ questionIndex++;
+
+ if(questionIndex>=games[gameIndex].questions.length){
+
+  questionIndex=0;
+  gameIndex++;
+
+ }
+
+ if(gameIndex>=games.length){
+
+  finishGame();
+
+ }else{
+
+  render();
+
+ }
+
+}
+
+// FINISH GAME
+
+function finishGame(){
+
+ $("game").classList.add("hidden");
+ $("ending").classList.remove("hidden");
+
+ $("finalScore").textContent=
+ score+" / 20 Hearts Collected 💗";
+
+ $("bar").style.width="100%";
+
+}
+
+// FINAL LOVE LETTER
+
+function openLetter(){
+
+ $("letter").classList.remove("hidden");
+
+ $("letterContent").textContent =
+`Baby,
+
+I hope nag-enjoy ka sa little game na ginawa ko for you.
+
+Sana kahit malayo ako, napaparamdam ko pa rin sa'yo kung gaano ka kahalaga sa akin.
+
+Remember, sa buhay, hindi talaga mawawala ang mga maling desisyon. Pero ang pagkakamali ay hindi kabawasan ng pagkatao mo. Simbolo ito na sinusubukan mo, natututo, at patuloy na lumalaban sa buhay.
+
+Thank you for making my days happier and for giving me countless reasons to smile.
+
+I can't wait for the day na hindi na natin kailangan ng screen just to see each other.
+
+Always remember, baby, na I'm always here at your service, anytime you need me. ♡
+
+I love you, always. ♡`;
+
+ $("letter").scrollIntoView({
+  behavior:"smooth",
+  block:"center"
+ });
+
+}
+
+// RESTART
+
+function restart(){
+
+ gameIndex=0;
+ questionIndex=0;
+ score=0;
+
+ $("ending").classList.add("hidden");
+ $("letter").classList.add("hidden");
+ $("welcome").classList.remove("hidden");
+
+}
+
+// FLOATING HEART ANIMATION
+
+setInterval(()=>{
+
+ const heart=document.createElement("span");
+
+ heart.className="floating";
+
+ heart.textContent=
+ ["♡","💕","💗","✨","💜"][
+  Math.floor(Math.random()*5)
+ ];
+
+ heart.style.left=Math.random()*100+"%";
+ heart.style.fontSize=(14+Math.random()*18)+"px";
+
+ heart.style.animationDuration=
+ (5+Math.random()*5)+"s";
+
+ $("hearts").appendChild(heart);
+
+ setTimeout(()=>heart.remove(),11000);
+
+},650);
+
+</script>
+
+</body>
+</html>
